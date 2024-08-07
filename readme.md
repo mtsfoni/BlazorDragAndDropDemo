@@ -1,0 +1,1 @@
+﻿# Demo of how to implement drag and drop in Blazor Wasm

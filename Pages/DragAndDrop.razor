@@ -1,0 +1,69 @@
+﻿@page "/dragndrop"
+
+
+@using System.Collections.Generic
+
+<h3>Drag and Drop Example</h3>
+
+<div class="container">
+    <div ondragover="event.preventDefault();" @ondrop="OnDropL">
+        <h4>Available Items</h4>
+        <table>
+            @foreach (var item in LeftList)
+            {
+                <tr draggable="true" @ondragstart="@( (e) => OnDragStart(e, item))">
+                    <td>@item</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div ondragover="event.preventDefault();" @ondrop="OnDropR">
+        <h4>Selected Items</h4>
+        <table>
+            @foreach (var item in RightList)
+            {
+                <tr draggable="true" @ondragstart="@( (e) => OnDragStart(e, item))">
+                    <td>@item</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<string> LeftList = new List<string> { "Item 1", "Item 2", "Item 3", "Item 4" };
+    private List<string> RightList = new List<string>();
+
+    private string DraggedItem;
+
+    private void OnDragStart(DragEventArgs args, string item)
+    {
+        DraggedItem = item;
+    }
+
+    private void OnDragOver(DragEventArgs args)
+    {
+        // args.DataTransfer.EffectAllowed = "move";
+    }
+
+    private void OnDropL(DragEventArgs args)
+    {
+        if (!string.IsNullOrEmpty(DraggedItem))
+        {
+            RightList.Remove(DraggedItem);
+            LeftList.Add(DraggedItem);
+            DraggedItem = null;
+        }
+    }
+
+    private void OnDropR(DragEventArgs args)
+    {
+        if (!string.IsNullOrEmpty(DraggedItem))
+        {
+            LeftList.Remove(DraggedItem);
+            RightList.Add(DraggedItem);
+            DraggedItem = null;
+        }
+    }
+}
